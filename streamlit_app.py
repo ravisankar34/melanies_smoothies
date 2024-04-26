@@ -23,8 +23,8 @@ my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT
 #st.stop()
 
 pd_df=my_dataframe.to_pandas()
-st.dataframe(pd_df)
-st.stop()
+#st.dataframe(pd_df)
+#st.stop()
 
 ingredients_list = st.multiselect('Choose upto 5 Ingredients:',my_dataframe,max_selections=5)
 
@@ -34,6 +34,8 @@ if ingredients_list:
     ingredients_string=''
     for each_fruit in ingredients_list:
         ingredients_string += each_fruit + ' '
+        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == each_fruit, 'SEARCH_ON'].iloc[0]
+        st.write('The search value for ', each_fruit,' is ', search_on, '.')
         st.subheader(each_fruit + 'Nutrition Information')
         fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon" + each_fruit)
         fv_df = st.dataframe(data=fruityvice_response.json())
